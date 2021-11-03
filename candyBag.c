@@ -1,12 +1,13 @@
 #include <stdio.h>
 #include <string.h>
+#define CANDIES 5
 // Function prototypes
 void getCandyCounts(char **candyBagPtrs, int numCandies[]);
 char menu();
 void displayCandy(char **candyBagPtrs, int numCandies[]);
 void displayIndividualCandy(char **candyBagPtrs, int numCandies[]);
 void getCandyToEat(char **candyBagPtrs, int numCandies[], int *candyChoicePtr, int *eatAmount);
-void downloadFile(int numCandies[]);
+void downloadCandyBag(int numCandies[]);
 
 
 int main()
@@ -39,7 +40,7 @@ int main()
                 numCandies[candyChoice - 1] -= eatAmount;
                 break;
             case 'D':
-                downloadFile(numCandies);
+                downloadCandyBag(numCandies);
                 break;
             case 'E':
                 printf("\nClosing candy bag program.");
@@ -81,7 +82,7 @@ void getCandyCounts(char **candyBagPtrs, int *numCandies)
     {
         case 1:
             // Use a loop to ask the user what candy they would like to collect, and save the answer in the numCandies array
-            for (int i = 0; i < 5; i++)
+            for (int i = 0; i < CANDIES; i++)
             {
                 printf("\nEnter the quantity of %s you collected: ", candyBagPtrs[i]);
                 scanf("\n%d", &numCandies[i]);
@@ -101,8 +102,8 @@ void getCandyCounts(char **candyBagPtrs, int *numCandies)
                 scanf("\n%s", fileName);
             }
 
-            // File found, begin reading each line in the text file and assign it to the numCandies arrau
-            for (i = 0; i < 5; i++)
+            // File found, begin reading each line in the text file and assign it to the numCandies array
+            for (i = 0; i < CANDIES; i++)
                 fscanf(candyBagFile, "\n%d", &numCandies[i]);
 
             break;
@@ -136,10 +137,10 @@ void displayCandy(char **candyBagPtrs, int numCandies[])
 {
     int i;
 
-    // Use both arrays passed in to display how many of each candy bars the user has
+    // Use both arrays passed in the function to display how many of each candy bars the user has
     printf("\nYou received:\n");
 
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < CANDIES; i++)
         printf("\n%d: %d %s", i + 1, numCandies[i], candyBagPtrs[i]);
 }
 
@@ -157,7 +158,7 @@ void displayIndividualCandy(char **candyBagPtrs, int numCandies[])
         scanf("\n%[^\n]", candyChoice);
 
         // Loop through the candyNamesPtr array to find a match
-        for (i = 0; i < 5; i++)
+        for (i = 0; i < CANDIES; i++)
         {
             if (strcmp(candyChoice, candyBagPtrs[i]) == 0)
             {
@@ -179,14 +180,14 @@ void getCandyToEat(char **candyBagPtrs, int numCandies[], int *candyChoicePtr, i
     int i, candyChoice, eatAmount;
 
     // Display menu to let the user choose (1-5) which candy they want to eat
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < CANDIES; i++)
         printf("\n%d:   %s", i + 1, candyBagPtrs[i]);
 
     printf("\nWhich candy would you like to eat (1-5): ");
     scanf("\n%d", &candyChoice);
 
     // Make sure candyChoice is (1-5)
-    while (candyChoice < 1 || candyChoice > 5)
+    while (candyChoice < 1 || candyChoice > CANDIES)
     {
         printf("\nInvalid entry, please enter between 1-5");
 
@@ -215,7 +216,7 @@ void getCandyToEat(char **candyBagPtrs, int numCandies[], int *candyChoicePtr, i
 }
 
 
-void downloadFile(int numCandies[])
+void downloadCandyBag(int numCandies[])
 {
     FILE *candyBagFile;
     char fileName[50];
@@ -229,7 +230,7 @@ void downloadFile(int numCandies[])
     candyBagFile = fopen(fileName, "w");
 
     // Start writing the candy name in one line, and its amount in the line after, and repeat
-    for (i = 0; i < 5; i++)
+    for (i = 0; i < CANDIES; i++)
         fprintf(candyBagFile, "%d\n", numCandies[i]);       // Amount in bag per candy written in file
 
     // Close the file
