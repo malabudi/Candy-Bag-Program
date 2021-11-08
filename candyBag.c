@@ -87,11 +87,18 @@ void getCandyCounts(char **candyBagPtrs, int *numCandies)
                 printf("\nEnter the quantity of %s you collected: ", candyBagPtrs[i]);
                 scanf("\n%d", &numCandies[i]);
             }
+
             break;
         case 2:
+            // Flush out the buffer
+            fflush(stdin);
+
             // Ask the user for the file name and see if there is a match
             printf("\nPlease enter the name of your txt file (include .txt at the end) ");
-            scanf("\n%s", fileName);
+            fgets(fileName, 50, stdin);
+
+            // Remove the new line at the end of the fileName from fgets by using strcspn to find the index of where \n is located
+            fileName[strcspn(fileName, "\n")] = '\0';
 
             while ((candyBagFile = fopen(fileName, "r")) == NULL)
             // If the user enters an invalid (null) file name let them enter a valid one
@@ -99,7 +106,7 @@ void getCandyCounts(char **candyBagPtrs, int *numCandies)
                 printf("\nError! %s could not be found.", fileName);
 
                 printf("\nPlease enter the name of your txt file (include .txt at the end) ");
-                scanf("\n%s", fileName);
+                fgets(fileName, 50, stdin);
             }
 
             // File found, begin reading each line in the text file and assign it to the numCandies array
@@ -153,9 +160,13 @@ void displayIndividualCandy(char **candyBagPtrs, int numCandies[])
 
     while (isCandyAvail == 0)
     {
+        fflush(stdin);
+
         // First ask the user what candy they would like to see individually
         printf("\nPlease enter the name of the candy: ");
-        scanf("\n%[^\n]", candyChoice);
+        fgets(candyChoice, 50, stdin);
+
+        candyChoice[strcspn(candyChoice, "\n")] = '\0';
 
         // Loop through the candyNamesPtr array to find a match
         for (i = 0; i < CANDIES; i++)
@@ -222,9 +233,13 @@ void downloadCandyBag(int numCandies[])
     char fileName[50];
     int i;
 
+    fflush(stdin);
+
     // Ask the user what would they like to name the file before they download it
     printf("\nWhat would you like to name your file? (make sure the name ends in .txt) ");
-    scanf("\n%s", fileName);
+    fgets(fileName, 50, stdin);
+
+    fileName[strcspn(fileName, "\n")] = '\0';
 
     // Download the file name if it does not already exist, otherwise it will overwrite
     candyBagFile = fopen(fileName, "w");
@@ -236,5 +251,6 @@ void downloadCandyBag(int numCandies[])
     // Close the file
     fclose(candyBagFile);
 
+    // Tell the user that the file has downloaded
     printf("\nFile successfully downloaded.");
 }
